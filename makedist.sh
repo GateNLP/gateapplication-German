@@ -15,10 +15,10 @@ mkdir -p $destdir/$name
 rm -f $name-*.zip
 rm -f $name-*.tgz
 tar --exclude-vcs --exclude=.gitmodules --exclude=.gitattributes --exclude=*.gazbin --exclude=*.zip --exclude=plugins/gateplugin-Stanford_CoreNLP/resources/* --exclude=plugins/gateplugin-StringAnnotation/tests/* --exclude=*.class -zcvf ${name}-${version}.tgz *
-pushd $destdir
+pushd $destdir/$name
 tar xvf $curdir/${name}-${version}.tgz
 rm $curdir/${name}-${version}.zip
-cd ..
+cd $destdir
 zip -r $curdir/$name-$version.zip $name
 echo Created a release zip for $name, version $version from branch $curbranch
 echo Zip file is $curdir/$name-$version.zip
