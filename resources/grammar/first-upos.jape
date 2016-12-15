@@ -1,0 +1,109 @@
+/*
+*  first.jape
+*
+* Copyright (c) 1998-2004, The University of Sheffield.
+*
+*  This file is part of GATE (see http://gate.ac.uk/), and is free
+*  software, licenced under the GNU Library General Public License,
+*  Version 2, June 1991 (in the distribution as file licence.html,
+*  and also available at http://gate.ac.uk/gate/licence.html).
+*
+*  Diana Maynard, 10 Sep 2001
+* 
+*  $Id: first.jape 19646 2016-10-06 12:35:17Z dgmaynard $
+*/
+
+Phase:	First
+Input: Token NumberLetter UserMention
+Options: control = appelt
+
+// this has to be run first of all. 
+// Use this file instead of first.jape if you have upos tags
+
+//////////////////////////////////////////////////////////////
+Macro: SPACE
+// space
+// control
+// space control
+// control space
+
+( 
+ ({SpaceToken.kind == space}
+  ({SpaceToken.kind == control})?
+  ({SpaceToken.kind == control})?
+ )
+|
+ ({SpaceToken.kind == control}
+  ({SpaceToken.kind == control})?
+  ({SpaceToken.kind == space})?
+ )
+)
+
+
+Macro:PROPN
+(
+ {Token.upos == PROPN, !UserMention}
+)
+///////////////////////////////////////////////////////////////
+
+Rule: ClosedClass
+// closed class words should not be part of names generally, so let's identify them
+Priority: 100
+
+(
+ {Token.upos == DET}|
+ {Token.upos == PRON}|
+ {Token.upos == CONJ}|
+ {Token.upos == SCONJ}|
+ {Token.string == "RT"}
+)
+ :tag
+-->
+:tag.ClosedClass = {rule = "ClosedClass"}
+
+Rule: NumberLetter
+Priority: 100
+( 
+ {NumberLetter}
+):tag
+-->
+{} 
+
+
+Rule: UpperAllCaps
+Priority: 100
+// separate proper nouns that are in all caps, as they're more ambiguous
+(
+ {Token.upos == PROPN, Token.orth == allCaps, !UserMention}
+ ({Token.string == "-"}
+  {Token.upos == PROPN, Token.orth == allCaps,!UserMention}
+ )?
+):tag
+-->
+:tag.Upper = {kind = "allCaps", rule = "Upper"}
+
+Rule: Upper
+/* define what can be a possible proper noun - 
+cater for the fact that POS tag might not be correct
+*/
+(
+ ((PROPN)| 
+   {Token.orth == upperInitial}|
+   {Token.orth == mixedCaps} 
+  )
+ ({Token.string == "-"}
+  (PROPN)
+ )?
+):tag
+-->
+:tag.Upper = {rule = "Upper"}
+
+
+Rule:NotUpper
+Priority: 500
+(
+ {UserMention}
+ )
+ -->
+ {}
+

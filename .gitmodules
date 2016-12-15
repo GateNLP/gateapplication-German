@@ -1,0 +1,6 @@
+[submodule "plugins/gateplugin-Stanford_CoreNLP"]
+	path = plugins/gateplugin-Stanford_CoreNLP
+	url = https://github.com/GateNLP/gateplugin-Stanford_CoreNLP.git
+[submodule "plugins/gateplugin-StringAnnotation"]
+	path = plugins/gateplugin-StringAnnotation
+	url = https://github.com/johann-petrak/gateplugin-StringAnnotation.git

@@ -1,0 +1,14 @@
+Phase:	NewLineToSplit
+Input: SpaceToken
+Options: control = all
+
+Rule: NLToSplit
+(
+ // {SpaceToken.kind == "control"}
+ ({SpaceToken.string=="\r"}{SpaceToken.string=="\n"})
+  |({SpaceToken.string=="\n"}{SpaceToken.string=="\r"})
+  |({SpaceToken.string=="\n"})
+  |({SpaceToken.string=="\r"})
+):lookup
+-->
+:lookup.Split = {kind=internal}

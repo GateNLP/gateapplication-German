@@ -1,0 +1,5 @@
+*.finf binary -delta
+*.zip binary -delta
+*.pdf binary -delta
+*.gz binary -delta
+*.tagger binary -delta
